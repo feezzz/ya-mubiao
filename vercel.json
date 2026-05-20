@@ -1,12 +1,7 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "designv2/**/*,js/**/*,icons/**/*,styles.css,index.html,manifest.webmanifest,service-worker.js,templates.json"
-    }
-  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/(.*)", "destination": "/api/index" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
