@@ -1,0 +1,82 @@
+<h2>目标列表优化：让每个目标的成长"看得见"</h2>
+<p class="subtitle">左：当前版本（纯文字列表）→ 右：优化后（卡片化 + 微型进度 + 状态图标）</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">当前版本</div>
+    <div class="mockup-body" style="font-family: 'Microsoft YaHei', sans-serif; padding: 18px; background: white; border-radius: 16px; min-height: 340px;">
+      <p style="color: #6f7882; font-size: 12px; margin: 0 0 10px;">我的目标 <strong style="color: #3fc58f;">3 个</strong></p>
+      <div style="display: grid; gap: 8px;">
+        <div style="border: 1px solid rgba(126,214,193,0.24); border-radius: 14px; padding: 12px;">
+          <strong style="font-size: 13px; display: block;">30 天背 300 个单词</strong>
+          <small style="color: #6f7882;">背 10 个单词 · 已打卡 8/30 天</small>
+        </div>
+        <div style="border: 1px solid rgba(126,214,193,0.24); border-radius: 14px; padding: 12px; background: linear-gradient(135deg, rgba(126,214,193,0.28), rgba(255,247,238,0.88));">
+          <strong style="font-size: 13px; display: block;">每天阅读 20 分钟</strong>
+          <small style="color: #6f7882;">阅读 20 分钟 · 已打卡 3/21 天</small>
+        </div>
+        <div style="border: 1px solid rgba(126,214,193,0.24); border-radius: 14px; padding: 12px;">
+          <strong style="font-size: 13px; display: block;">3 个月减脂 5 斤</strong>
+          <small style="color: #6f7882;">运动 20 分钟 · 已打卡 0/90 天</small>
+        </div>
+      </div>
+      <p style="text-align: center; color: #ccc; font-size: 10px; margin-top: 20px;">三个目标看起来差不多，很难一眼看出进度差异</p>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">优化后：卡片化 + 成长可视化</div>
+    <div class="mockup-body" style="font-family: 'Microsoft YaHei', sans-serif; padding: 18px; background: white; border-radius: 16px; min-height: 340px;">
+      <p style="color: #6f7882; font-size: 12px; margin: 0 0 10px;">我的小芽 <strong style="color: #3fc58f;">3 棵</strong></p>
+      <div style="display: grid; gap: 10px;">
+
+        <div style="border: 1px solid rgba(126,214,193,0.24); border-radius: 16px; padding: 16px; display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center;">
+          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, rgba(126,214,193,0.25), rgba(255,247,238,0.8)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px;">🍃</div>
+          <div>
+            <strong style="font-size: 14px; display: block;">30 天背 300 个单词</strong>
+            <small style="color: #6f7882;">背 10 个单词</small>
+            <div style="height: 6px; background: rgba(126,214,193,0.15); border-radius: 99px; margin-top: 6px; overflow: hidden;">
+              <div style="width: 27%; height: 100%; background: linear-gradient(90deg, #3fc58f, #7ed6c1); border-radius: 99px;"></div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <strong style="font-size: 18px; color: #3fc58f;">8</strong><small style="color: #6f7882;">/30</small>
+            <br><small style="color: #ffd600; font-weight: bold; font-size: 10px;">🔥 3 天</small>
+          </div>
+        </div>
+
+        <div style="border: 1px solid rgba(126,214,193,0.24); border-radius: 16px; padding: 16px; display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center; background: linear-gradient(135deg, rgba(126,214,193,0.08), rgba(255,247,238,0.3));">
+          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, rgba(126,214,193,0.25), rgba(255,247,238,0.8)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px;">🌱</div>
+          <div>
+            <strong style="font-size: 14px; display: block;">每天阅读 20 分钟</strong>
+            <small style="color: #6f7882;">阅读 20 分钟</small>
+            <div style="height: 6px; background: rgba(126,214,193,0.15); border-radius: 99px; margin-top: 6px; overflow: hidden;">
+              <div style="width: 14%; height: 100%; background: linear-gradient(90deg, #3fc58f, #7ed6c1); border-radius: 99px;"></div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <strong style="font-size: 18px; color: #3fc58f;">3</strong><small style="color: #6f7882;">/21</small>
+            <br><small style="color: #6f7882; font-size: 10px;">今天待打卡</small>
+          </div>
+        </div>
+
+        <div style="border: 1px solid rgba(126,214,193,0.24); border-radius: 16px; padding: 16px; display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center; opacity: 0.6;">
+          <div style="width: 42px; height: 42px; background: rgba(126,214,193,0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px;">🌰</div>
+          <div>
+            <strong style="font-size: 14px; display: block;">3 个月减脂 5 斤</strong>
+            <small style="color: #6f7882;">运动 20 分钟</small>
+            <div style="height: 6px; background: rgba(126,214,193,0.15); border-radius: 99px; margin-top: 6px; overflow: hidden;">
+              <div style="width: 0%; height: 100%; background: linear-gradient(90deg, #3fc58f, #7ed6c1); border-radius: 99px;"></div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <strong style="font-size: 18px; color: #6f7882;">0</strong><small style="color: #6f7882;">/90</small>
+            <br><small style="color: #6f7882; font-size: 10px;">等待开始</small>
+          </div>
+        </div>
+
+      </div>
+      <p style="text-align: center; color: #6f7882; font-size: 10px; margin-top: 14px;">每个目标有了自己的"成长阶段图标"和进度条，差异一目了然</p>
+    </div>
+  </div>
+</div>

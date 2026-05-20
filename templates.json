@@ -1,0 +1,18 @@
+[
+  { "id":"learn-vocab","category":"study","icon":"📚","name":"30 天背 300 个单词","days":30,"time":"20 分钟","task":"背 10 个单词","keywords":["背单词","词汇","英语","四级","六级","雅思","托福"],"description":"适合备考、想提升词汇量的你" },
+  { "id":"learn-reading","category":"study","icon":"📚","name":"每天阅读 20 分钟","days":21,"time":"20 分钟","task":"阅读 20 分钟","keywords":["阅读","读书","看书","充电","学习"],"description":"养成每日阅读的好习惯" },
+  { "id":"learn-exam","category":"study","icon":"📚","name":"考证冲刺刷题","days":60,"time":"30 分钟","task":"刷题 30 分钟","keywords":["考证","考试","刷题","笔试","面试","证书","考研","考公"],"description":"为目标考试每天进步一点点" },
+  { "id":"sport-daily","category":"sport","icon":"🏃","name":"每天运动 30 分钟","days":21,"time":"30 分钟","task":"运动 20 分钟","keywords":["运动","跑步","健身","减脂","减肥","瘦身","锻炼","体能"],"description":"从今天开始动起来" },
+  { "id":"sport-sleep","category":"sport","icon":"🏃","name":"早睡早起","days":30,"time":"10 分钟","task":"22:30 放下手机","keywords":["早睡","早起","睡眠","作息","熬夜","规律"],"description":"用 30 天重建健康作息" },
+  { "id":"sport-meditate","category":"sport","icon":"🏃","name":"每天冥想 10 分钟","days":14,"time":"10 分钟","task":"冥想 10 分钟","keywords":["冥想","正念","放松","焦虑","压力","平静","专注"],"description":"给自己 10 分钟的内心平静" },
+  { "id":"money-save","category":"money","icon":"💰","name":"存钱 1 万元","days":100,"time":"10 分钟","task":"存下 100 元","keywords":["存钱","省钱","储蓄","攒钱","存款","理财","存"],"description":"每天存一点，100 天后收获惊喜" },
+  { "id":"money-track","category":"money","icon":"💰","name":"每日记账","days":21,"time":"5 分钟","task":"记录今日收支","keywords":["记账","消费","支出","账单","开支","花钱"],"description":"21 天养成记账习惯" },
+  { "id":"skill-draw","category":"skill","icon":"🎨","name":"每天画画 30 分钟","days":30,"time":"30 分钟","task":"画画 30 分钟","keywords":["画画","绘画","素描","涂鸦","插画","手绘"],"description":"每天一画，30 天看见进步" },
+  { "id":"skill-instrument","category":"skill","icon":"🎨","name":"每天练琴/乐器","days":60,"time":"30 分钟","task":"练习 30 分钟","keywords":["乐器","钢琴","吉他","练琴","弹琴","音乐","练字"],"description":"坚持练习是唯一的捷径" },
+  { "id":"skill-journal","category":"skill","icon":"🎨","name":"每天写日记","days":21,"time":"15 分钟","task":"写一篇日记","keywords":["日记","写作","记录","随笔","反思","总结"],"description":"记录每一天的思考和成长" },
+  { "id":"work-pomodoro","category":"work","icon":"💼","name":"番茄工作法","days":14,"time":"25 分钟","task":"完成 4 个番茄钟","keywords":["番茄","专注","效率","工作","拖延","任务","时间管理"],"description":"用番茄钟打败拖延症" },
+  { "id":"work-clean","category":"work","icon":"💼","name":"每日清理待办","days":7,"time":"15 分钟","task":"清理 3 个待办事项","keywords":["待办","任务","清理","整理","计划","清单","GTD"],"description":"每天清掉 3 个小任务" },
+  { "id":"digital-less-phone","category":"digital","icon":"🌈","name":"少刷短视频","days":21,"time":"10 分钟","task":"短视频时间控制在 30 分钟内","keywords":["短视频","刷手机","抖音","快手","屏幕时间","戒手机","少看"],"description":"把刷视频的时间还给生活" },
+  { "id":"digital-disconnect","category":"digital","icon":"🌈","name":"睡前 1 小时断网","days":14,"time":"20 分钟","task":"睡前 1 小时放下手机","keywords":["断网","睡前","手机","屏幕","蓝光","睡眠质量","关机"],"description":"睡前一小时，还给睡眠" },
+  { "id":"custom","category":"custom","icon":"✏️","name":"写自己的目标","days":0,"time":"","task":"","keywords":[],"description":"不用模板，我自己来" }
+]

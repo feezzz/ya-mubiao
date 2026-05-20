@@ -1,0 +1,32 @@
+CREATE DATABASE IF NOT EXISTS ya_mubiao_demo
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE ya_mubiao_demo;
+
+CREATE TABLE IF NOT EXISTS goals (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  days INT NOT NULL,
+  time_investment VARCHAR(50) NOT NULL,
+  task VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS checkins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  goal_id INT NOT NULL,
+  checkin_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_goal_day (goal_id, checkin_date),
+  CONSTRAINT fk_checkins_goal FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS reviews (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  review_date DATE NOT NULL,
+  done_text TEXT,
+  stuck_text TEXT,
+  next_text TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

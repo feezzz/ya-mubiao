@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash *)",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"require\\('./server.js'\\)\")",
+      "Bash(curl *)",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d.join\\(''\\)\\);console.log\\('Goals:',j.length\\);j.forEach\\(g=>console.log\\(' -',g.name,'\\(',g.checkins.length,'/',g.days,'checkins\\)'\\)\\)}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d.join\\(''\\)\\);console.log\\('Updated:',j.name,j.days+'天',j.checkins.length+' checkins'\\)}\\)\")",
+      "Bash(sed -n '121,123p' \"C:/Users/rl109/Desktop/芽目标/server.js\")",
+      "Read(//tmp/**)",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const t=JSON.parse\\(d.join\\(''\\)\\);console.log\\(t.length+' templates loaded'\\);console.log\\('Categories:',[...new Set\\(t.map\\(x=>x.category\\)\\)].join\\(', '\\)\\)}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const t=JSON.parse\\(d.join\\(''\\)\\);console.log\\('Study filter:',t.length+' templates'\\);t.forEach\\(x=>console.log\\(' -',x.name\\)\\)}\\)\")",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(node server.js)",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const t=JSON.parse\\(d.join\\(''\\)\\);console.log\\(t.length+' templates'\\);console.log\\('Categories:',[...new Set\\(t.map\\(x=>x.category\\)\\)].join\\(', '\\)\\)}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>console.log\\(JSON.parse\\(d.join\\(''\\)\\).length+' templates'\\)\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const h=d.join\\(''\\);console.log\\('reviewGoalName:',/reviewGoalName/.test\\(h\\)?'✅':'❌'\\);console.log\\('checkin buttons with goal task via JS:',/setCheckinButtons/.test\\(h\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d.join\\(''\\)\\);console.log\\('User:',j.name\\)}\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);['js/user.js','js/app.js'].forEach\\(f=>{try{new Function\\(fs.readFileSync\\(f,'utf8'\\)\\);console.log\\('OK',f\\)}catch\\(e\\){console.log\\('FAIL',f,e.message\\)}}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const h=d.join\\(''\\);console.log\\('user-pill:',/user-pill/.test\\(h\\)?'✅':'❌'\\);console.log\\('userAvatar:',/userAvatar/.test\\(h\\)?'✅':'❌'\\);console.log\\('user-area in brand:',/brand[\\\\s\\\\S]*user-area/.test\\(h\\)?'✅':'❌'\\)}\\)\")",
+      "Skill(agent-browser)",
+      "Bash(node -e \"const fs=require\\('fs'\\);['js/app.js'].forEach\\(f=>{try{new Function\\(fs.readFileSync\\(f,'utf8'\\)\\);console.log\\('OK',f\\)}catch\\(e\\){console.log\\('FAIL',f,e.message\\)}}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const css=d.join\\(''\\);console.log\\('review-dialogue grid:',/\\\\.review-dialogue\\\\s*\\\\{[^}]*display:\\\\s*grid/.test\\(css\\)?'✅':'❌'\\);console.log\\('review-step card:',/\\\\.review-step\\\\s*\\\\{[^}]*border-radius:\\\\s*18px/.test\\(css\\)?'✅':'❌'\\);console.log\\('review-bear centered:',/margin:\\\\s*0 auto/.test\\(css\\)?'✅':'❌'\\);console.log\\('review-extra-actions:',/\\\\.review-extra-actions/.test\\(css\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const h=d.join\\(''\\);console.log\\('review-extra-actions div:',/review-extra-actions/.test\\(h\\)?'✅':'❌'\\);console.log\\('buttons not wide:',!/ghost-btn wide.*reviewHint/.test\\(h\\)?'✅ \\(compact\\)':'❌'\\)}\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);try{new Function\\(fs.readFileSync\\('js/app.js','utf8'\\)\\);console.log\\('app.js OK'\\)}catch\\(e\\){console.log\\('FAIL',e.message\\)}\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const css=d.join\\(''\\);console.log\\('bear-breathe:',/@keyframes bear-breathe/.test\\(css\\)?'✅':'❌'\\);console.log\\('bear-bounce:',/@keyframes bear-bounce/.test\\(css\\)?'✅':'❌'\\);console.log\\('bear-wave:',/@keyframes bear-wave/.test\\(css\\)?'✅':'❌'\\);console.log\\('bear-tilt:',/@keyframes bear-tilt/.test\\(css\\)?'✅':'❌'\\);console.log\\('speech-pop:',/@keyframes speech-pop/.test\\(css\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const h=d.join\\(''\\);console.log\\('detailAiReviewBtn:',/detailAiReviewBtn/.test\\(h\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);['js/views/review.js','js/views/home.js'].forEach\\(f=>{try{new Function\\(fs.readFileSync\\(f,'utf8'\\)\\);console.log\\(f,'OK'\\)}catch\\(e\\){console.log\\(f,'FAIL',e.message\\)}}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const h=d.join\\(''\\);console.log\\('aiDecomposeBtn in HTML:',/aiDecomposeBtn/.test\\(h\\)?'✅':'❌'\\);console.log\\('in create step 1:',/data-step=\\\\\"1\\\\\"[\\\\s\\\\S]*aiDecomposeBtn/.test\\(h\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);['js/state.js','js/app.js','js/views/complete.js','js/views/bear.js','js/views/garden.js','js/views/home.js'].forEach\\(f=>{try{new Function\\(fs.readFileSync\\(f,'utf8'\\)\\);console.log\\('OK',f\\)}catch\\(e\\){console.log\\('FAIL',f,e.message\\)}}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const h=d.join\\(''\\);console.log\\('gardenGrid:',/gardenGrid/.test\\(h\\)?'✅':'❌'\\);console.log\\('exportGoalBtn:',/exportGoalBtn/.test\\(h\\)?'✅':'❌'\\);console.log\\('completeReviewHint:',/completeReviewHint/.test\\(h\\)?'✅':'❌'\\);console.log\\('completeTitle:',/completeTitle/.test\\(h\\)?'✅':'❌'\\);console.log\\('homeReviewReminder:',/homeReviewReminder/.test\\(h\\)?'✅':'❌'\\);console.log\\('garden.js:',/garden\\\\.js/.test\\(h\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const css=d.join\\(''\\);console.log\\('celebration-glow:',/@keyframes celebration-glow/.test\\(css\\)?'✅':'❌'\\);console.log\\('garden-grid:',/\\\\.garden-grid/.test\\(css\\)?'✅':'❌'\\);console.log\\('home-review-reminder:',/\\\\.home-review-reminder/.test\\(css\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);try{new Function\\(fs.readFileSync\\('js/state.js','utf8'\\)\\);console.log\\('state.js OK'\\)}catch\\(e\\){console.log\\('FAIL',e.message\\)}\")",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const css=d.join\\(''\\);console.log\\('level-2 stem:',/level-2.*span.*nth-child\\\\\\(1\\\\\\)/.test\\(css\\)?'✅':'❌'\\);console.log\\('level-5 span:',/level-5 span/.test\\(css\\)?'✅':'❌'\\);console.log\\('transition:',/transition: opacity/.test\\(css\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(npm install *)",
+      "Bash(node -e \"const d=[];process.stdin.on\\('data',c=>d.push\\(c\\)\\);process.stdin.on\\('end',\\(\\)=>{const h=d.join\\(''\\);console.log\\('title:',/芽目标/.test\\(h\\)?'✅':'❌'\\);console.log\\('api.js loaded:',/api\\\\.js/.test\\(h\\)?'✅':'❌'\\);console.log\\('styles loaded:',/styles\\\\.css/.test\\(h\\)?'✅':'❌'\\)}\\)\")",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

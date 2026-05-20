@@ -1,0 +1,32 @@
+{
+  "name": "芽目标",
+  "short_name": "芽目标",
+  "description": "陪你把目标慢慢养大的可爱目标管理 App",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fffdf8",
+  "theme_color": "#3fc58f",
+  "categories": ["productivity", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
