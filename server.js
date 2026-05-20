@@ -556,8 +556,15 @@ app.use((error, req, res, next) => {
   res.status(500).json({ message: "服务暂时出错了，请稍后再试。", detail: error.message });
 });
 
-// Start
+// Lazy init for Vercel
+let dbReady = false;
 if (isVercel) {
+  app.use(async (req, res, next) => {
+    if (!dbReady) {
+      try { await initDatabase(); dbReady = true; } catch (e) { console.error(e); }
+    }
+    next();
+  });
   module.exports = app;
 } else {
   initDatabase()
