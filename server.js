@@ -120,6 +120,16 @@ async function fetchGoals(userId) {
 
 // === API Routes ===
 
+app.get("/api/debug", (req, res) => {
+  const fs = require("fs");
+  const rootFiles = fs.readdirSync(__dirname);
+  const designFiles = fs.existsSync(path.join(__dirname, "designv2"))
+    ? fs.readdirSync(path.join(__dirname, "designv2")) : [];
+  const jsFiles = fs.existsSync(path.join(__dirname, "js"))
+    ? fs.readdirSync(path.join(__dirname, "js")) : [];
+  res.json({ __dirname, cwd: process.cwd(), rootFiles, designFiles, jsFiles });
+});
+
 app.get("/api/health", async (req, res) => {
   try {
     await pool.query("SELECT 1");
