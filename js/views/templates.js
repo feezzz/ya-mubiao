@@ -6,7 +6,11 @@ window.App = window.App || {};
 
   async function loadTemplates() {
     try {
-      const data = await App.request("/templates");
+      var data = App._templatesCache;
+      if (!data || !data.length) {
+        data = await App.request("/templates");
+        App._templatesCache = data;
+      }
       templates = data;
       renderTemplates();
     } catch (e) {

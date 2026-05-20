@@ -27,17 +27,17 @@ window.App = window.App || {};
   async function loadData() {
     if (!App.getUserId()) { App.render(); return; }
     try {
-      const [goals, reviews] = await Promise.all([
-        request("/goals"),
-        request("/reviews")
-      ]);
-      App.state.goals = goals;
-      App.state.reviews = reviews;
-      if (!App.state.activeGoalId && goals.length) {
-        App.state.activeGoalId = goals[0].id;
+      const data = await request("/init");
+      App.state.goals = data.goals;
+      App.state.reviews = data.reviews;
+      if (data.templates && data.templates.length) {
+        App._templatesCache = data.templates;
       }
-      if (App.state.activeGoalId && !goals.some((g) => g.id === App.state.activeGoalId)) {
-        App.state.activeGoalId = goals[0]?.id || null;
+      if (!App.state.activeGoalId && data.goals.length) {
+        App.state.activeGoalId = data.goals[0].id;
+      }
+      if (App.state.activeGoalId && !data.goals.some((g) => g.id === App.state.activeGoalId)) {
+        App.state.activeGoalId = data.goals[0]?.id || null;
       }
       App.render();
     } catch (error) {

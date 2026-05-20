@@ -125,6 +125,27 @@ async function fetchGoals(userId) {
 
 // === API Routes ===
 
+app.get("/api/init", async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    if (!userId) return res.json({ goals: [], reviews: [], templates: loadTemplates() });
+
+    const goals = await fetchGoals(userId);
+
+    const { rows: reviews } = await pool.query(
+      `SELECT id, goal_id AS "goalId", TO_CHAR(review_date, 'YYYY-MM-DD') AS date,
+        done_text AS done, stuck_text AS stuck, next_text AS next
+       FROM reviews WHERE user_id = $1 ORDER BY id DESC`, [userId]
+    );
+
+    res.json({
+      goals,
+      reviews: reviews.map((r) => ({ ...r, id: String(r.id) })),
+      templates: loadTemplates()
+    });
+  } catch (error) { next(error); }
+});
+
 app.get("/api/debug", (req, res) => {
   const fs = require("fs");
   const rootFiles = fs.readdirSync(__dirname);
