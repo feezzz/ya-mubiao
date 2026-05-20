@@ -15,10 +15,12 @@ window.App = window.App || {};
       return;
     }
 
-    records.slice(0, 6).forEach((date, i) => {
+    records.slice(0, 10).forEach((c, i) => {
       const item = document.createElement("div");
       item.className = "history-item";
-      item.innerHTML = `<strong>第 ${records.length - i} 次打卡</strong><small>${App.escapeHTML(date)} · ${App.escapeHTML(goal.task)}</small>`;
+      var dateStr = typeof c === 'string' ? c : c.date;
+      var note = (typeof c === 'object' && c.note) ? '<br>💬 ' + App.escapeHTML(c.note) : '';
+      item.innerHTML = `<strong>第 ${records.length - i} 次打卡</strong><small>${App.escapeHTML(dateStr)} · ${App.escapeHTML(goal.task)}${note}</small>`;
       history.appendChild(item);
     });
   }

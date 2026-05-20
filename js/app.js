@@ -91,6 +91,7 @@
     window.App.renderDetail();
     window.App.renderReview();
     window.App.renderBear();
+    window.App.renderStatsPage();
     window.App.initCalendar();
     window.App.loadTemplates();
     window.App.renderUserSwitch();
@@ -395,6 +396,21 @@
   window.App.hideLoading = hideLoading;
   window.App.render = render;
   window.App.bindEvents = bindEvents;
+
+  // Dark mode
+  var savedTheme = localStorage.getItem('ya_theme');
+  if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); }
+  var themeBtn = $('#themeToggle');
+  if (themeBtn) {
+    themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    themeBtn.addEventListener('click', function() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? '' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('ya_theme', next || 'light');
+      themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+  }
 
   bindEvents();
   window.App.resetCreateFlow();

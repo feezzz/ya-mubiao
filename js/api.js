@@ -74,6 +74,15 @@ window.App = window.App || {};
       await loadData();
       document.getElementById("completeMessage").textContent =
         `今天完成：${goal.task}。你的「${goal.name}」已经发芽一点点。`;
+      try {
+        var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 880; gain.gain.value = 0.1;
+        osc.start(); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.stop(ctx.currentTime + 0.3);
+      } catch(e) {}
       App.showToast("完成啦！小芽长大了一点点。");
       App.showView("complete");
     } catch (error) {

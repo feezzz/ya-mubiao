@@ -22,7 +22,8 @@
             <strong>芽目标</strong>
             <span>YA MUBIAO</span>
           </div>
-          <div class="user-area" id="userArea">
+          <button class="theme-toggle" id="themeToggle" type="button" title="切换深色模式">🌙</button>
+        <div class="user-area" id="userArea">
             <button class="user-pill" id="userSwitchBtn" type="button">
               <span class="user-avatar" id="userAvatar">?</span>
               <span class="user-name" id="userSwitchName">未登录</span>
@@ -37,6 +38,7 @@
           <button class="nav-item" data-view="create">种目标</button>
           <button class="nav-item" data-view="detail">成长</button>
           <button class="nav-item" data-view="review">复盘</button>
+          <button class="nav-item" data-view="stats">统计</button>
           <button class="nav-item" data-view="bear">芽芽熊</button>
         </nav>
 
@@ -110,6 +112,10 @@
             💡 今天还没写复盘，<a href="#review" class="reminder-link">记一笔今天的感受？</a>
           </div>
 
+          <div class="goal-search-bar" id="goalSearchBar" style="display:none;">
+            <input id="goalSearchInput" type="text" placeholder="搜索目标..." />
+          </div>
+
           <div class="dashboard-grid home-dashboard">
             <article class="panel today-card">
               <div class="panel-head">
@@ -142,6 +148,10 @@
               </div>
               <p class="large-message" id="bearMessage">你想先养大哪一个目标？</p>
             </article>
+          </div>
+
+          <div class="archived-toggle">
+            <button type="button" class="ghost-btn" id="showArchivedBtn">📦 查看已归档目标</button>
           </div>
 
           <article class="panel calendar-panel" id="calendarPanel">
@@ -386,6 +396,14 @@
             <div id="gardenGrid" class="garden-grid"></div>
           </div>
         </section>
+
+        <section class="view stats-view" id="stats">
+          <div class="section-title">
+            <p class="eyebrow">数据统计</p>
+            <h2>看到你的坚持</h2>
+          </div>
+          <div id="statsContent"></div>
+        </section>
       </main>
     </div>
 
@@ -394,6 +412,7 @@
       <button class="nav-item" data-view="create">目标</button>
       <button class="nav-item" data-view="detail">成长</button>
       <button class="nav-item" data-view="review">复盘</button>
+      <button class="nav-item" data-view="stats">统计</button>
       <button class="nav-item" data-view="bear">熊熊</button>
     </nav>
 
@@ -419,6 +438,7 @@
     <script src="js/views/bear.js"></script>
     <script src="js/views/complete.js"></script>
     <script src="js/ai.js"></script>
+    <script src="js/views/stats.js"></script>
     <script src="js/views/garden.js"></script>
     <script src="js/views/templates.js"></script>
     <script src="js/views/calendar.js"></script>

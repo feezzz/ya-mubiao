@@ -39,8 +39,25 @@ window.App = window.App || {};
     return Math.min(100, Math.round((goal.checkins.length / goal.days) * 100));
   }
 
+  function getCheckinDates(goal) {
+    if (!goal || !goal.checkins) return [];
+    return goal.checkins.map(function(c) {
+      return typeof c === 'string' ? c : c.date;
+    });
+  }
+
+  function getCheckinNote(goal, dateStr) {
+    if (!goal || !goal.checkins) return "";
+    var found = goal.checkins.find(function(c) {
+      return (typeof c === 'string' ? c : c.date) === dateStr;
+    });
+    return found && found.note ? found.note : "";
+  }
+
   function hasCheckedToday(goal) {
-    return Boolean(goal?.checkins.includes(localDateISO()));
+    if (!goal) return false;
+    var today = localDateISO();
+    return getCheckinDates(goal).some(function(d) { return d === today; });
   }
 
   function totalCheckins() {
@@ -60,7 +77,7 @@ window.App = window.App || {};
 
   function daysSinceLastCheckin(goal) {
     if (!goal || !goal.checkins.length) return -1;
-    var dates = new Set(goal.checkins);
+    var dates = new Set(getCheckinDates(goal));
     var today2 = new Date();
     var todayStr2 = localDateISO(today2);
     if (dates.has(todayStr2)) return 0;
@@ -98,12 +115,12 @@ window.App = window.App || {};
 
   function simpleStreak(goal) {
     if (!goal || !goal.checkins.length) return 0;
-    const dates = new Set(goal.checkins);
-    let cursor = new Date();
+    const dates = new Set(getCheckinDates(goal));
+    var cursor = new Date();
     if (!dates.has(localDateISO(cursor))) {
       cursor.setDate(cursor.getDate() - 1);
     }
-    let streak = 0;
+    var streak = 0;
     while (dates.has(localDateISO(cursor))) {
       streak += 1;
       cursor.setDate(cursor.getDate() - 1);
@@ -114,6 +131,7 @@ window.App = window.App || {};
   function buildPlan(goal) {
     if (!goal) return [];
     const today = new Date();
+    var dates = getCheckinDates(goal);
     return Array.from({ length: 7 }, (_, i) => {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
@@ -122,7 +140,7 @@ window.App = window.App || {};
         label: i === 0 ? "今天" : `第 ${i + 1} 天`,
         date: iso,
         task: goal.task,
-        done: goal.checkins.includes(iso)
+        done: dates.indexOf(iso) !== -1
       };
     });
   }
@@ -167,6 +185,8 @@ window.App = window.App || {};
   App.stageFor = stageFor;
   App.bearFor = bearFor;
   App.simpleStreak = simpleStreak;
+  App.getCheckinDates = getCheckinDates;
+  App.getCheckinNote = getCheckinNote;
   App.daysSinceLastCheckin = daysSinceLastCheckin;
   App.buildPlan = buildPlan;
   App.createFormData = createFormData;

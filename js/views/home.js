@@ -63,6 +63,8 @@ window.App = window.App || {};
     }
 
     App.state.goals.forEach((goal) => {
+      var searchTerm = (document.getElementById("goalSearchInput")?.value || "").toLowerCase();
+      if (searchTerm && !goal.name.toLowerCase().includes(searchTerm) && !goal.task.toLowerCase().includes(searchTerm)) return;
       const stage = App.stageFor(goal);
       const progress = App.goalProgress(goal);
       const streak = App.simpleStreak(goal);
@@ -75,6 +77,7 @@ window.App = window.App || {};
         <div class="goal-card-body">
           <strong>${App.escapeHTML(goal.name)}</strong>
           <small>${App.escapeHTML(goal.task)}</small>
+          ${(function(){ var today = App.localDateISO(); var note = App.getCheckinNote(goal, today); return note ? '<span class="goal-card-note">💬 '+App.escapeHTML(note)+'</span>' : ''; })()}
           <div class="goal-card-bar">
             <div class="goal-card-fill" style="width:${progress}%"></div>
           </div>
@@ -83,6 +86,7 @@ window.App = window.App || {};
           <strong>${goal.checkins.length}<small>/${goal.days}</small></strong>
           ${streak > 0 ? `<span class="goal-card-streak">🔥 ${streak} 天</span>` : (goal.checkins.length === 0 ? `<span class="goal-card-hint">等待开始</span>` : `<span class="goal-card-hint">今天待打卡</span>`)}
         </div>
+        ${goal.archived ? '' : '<div class="goal-card-actions"><button type="button" class="goal-card-action pin-btn" data-action="pin" data-goal-id="'+goal.id+'">'+(goal.pinned?'📌':'📍')+'</button><button type="button" class="goal-card-action archive-btn" data-action="archive" data-goal-id="'+goal.id+'">📦</button></div>'}
       `;
       card.addEventListener("click", () => {
         App.state.activeGoalId = goal.id;
@@ -90,6 +94,23 @@ window.App = window.App || {};
         App.showView("detail");
       });
       list.appendChild(card);
+    });
+    list.querySelectorAll('.goal-card-action').forEach(function(btn) {
+      btn.addEventListener('click', async function(e) {
+        e.stopPropagation();
+        var goalId = btn.dataset.goalId;
+        var action = btn.dataset.action;
+        if (action === 'pin') {
+          var goal = App.state.goals.find(function(g) { return g.id === goalId; });
+          await App.request('/goals/' + goalId + '/pin', { method: 'POST', body: JSON.stringify({ pinned: !goal.pinned }) });
+          await App.loadData();
+        } else if (action === 'archive') {
+          if (!confirm('归档这个目标？可以在「已归档」中恢复。')) return;
+          await App.request('/goals/' + goalId + '/archive', { method: 'POST' });
+          await App.loadData();
+          App.showToast('目标已归档。');
+        }
+      });
     });
   }
 
@@ -127,6 +148,12 @@ window.App = window.App || {};
     App.setCheckinButtons(checkedToday, goal);
     renderGoalCards();
 
+    // Show search if 3+ goals
+    var searchBar = document.getElementById("goalSearchBar");
+    if (searchBar) {
+      searchBar.style.display = App.state.goals.length >= 3 ? "block" : "none";
+    }
+
     const gid = goal ? `?goal_id=${goal.id}` : "";
     // Review reminder on home
     var reviewReminder = document.getElementById("homeReviewReminder");
@@ -150,5 +177,34 @@ window.App = window.App || {};
         document.getElementById("sidebarMessage").textContent = msg;
       }
     }).catch(() => {});
+
+    var searchInput = document.getElementById("goalSearchInput");
+    if (searchInput && !searchInput._bound) {
+      searchInput._bound = true;
+      searchInput.addEventListener("input", function() { renderGoalCards(); });
+    }
+
+    var archivedBtn = document.getElementById("showArchivedBtn");
+    if (archivedBtn && !archivedBtn._bound) {
+      archivedBtn._bound = true;
+      archivedBtn.addEventListener("click", async function() {
+        var goals = await App.request('/goals?archived=1');
+        var modal = document.createElement('div');
+        modal.className = 'archived-modal';
+        modal.innerHTML = '<div class="archived-modal-card"><h3>📦 已归档目标</h3><div class="archived-list">'+
+          (goals.length ? goals.map(function(g){return '<div class="archived-item"><span>'+App.escapeHTML(g.name)+'</span><button class="ghost-btn restore-btn" data-goal-id="'+g.id+'">恢复</button></div>';}).join('') : '<p style="color:var(--muted)">没有已归档的目标</p>')+
+          '</div><button class="ghost-btn close-archived">关闭</button></div>';
+        document.body.appendChild(modal);
+        modal.querySelector('.close-archived').addEventListener('click', function(){ modal.remove(); });
+        modal.querySelectorAll('.restore-btn').forEach(function(b){
+          b.addEventListener('click', async function(){
+            await App.request('/goals/'+b.dataset.goalId+'/restore', {method:'POST'});
+            modal.remove();
+            App.loadData();
+            App.showToast('目标已恢复。');
+          });
+        });
+      });
+    }
   };
 })(window.App);

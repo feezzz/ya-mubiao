@@ -53,6 +53,8 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
+  try { await pool.query("ALTER TABLE goals ADD COLUMN pinned BOOLEAN DEFAULT FALSE"); } catch (e) {}
+  try { await pool.query("ALTER TABLE goals ADD COLUMN archived BOOLEAN DEFAULT FALSE"); } catch (e) {}
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS checkins (
@@ -68,6 +70,7 @@ async function initDatabase() {
   try {
     await pool.query(`CREATE UNIQUE INDEX IF NOT EXISTS idx_checkins_goal_day ON checkins (goal_id, checkin_date)`);
   } catch (e) {}
+  try { await pool.query("ALTER TABLE checkins ADD COLUMN note TEXT NULL"); } catch (e) {}
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS reviews (
@@ -99,17 +102,21 @@ function toGoal(row, checkins) {
     time: row.time_investment,
     task: row.task,
     createdAt: row.created_at,
+    pinned: !!row.pinned,
+    archived: !!row.archived,
     checkins: checkins || []
   };
 }
 
-async function fetchGoals(userId) {
+async function fetchGoals(userId, includeArchived) {
   if (!userId) return [];
+  var where = "WHERE user_id = $1";
+  if (!includeArchived) where += " AND (archived IS NULL OR archived = FALSE)";
   const { rows: goals } = await pool.query(
-    "SELECT * FROM goals WHERE user_id = $1 ORDER BY id DESC", [userId]
+    "SELECT * FROM goals " + where + " ORDER BY pinned DESC, id DESC", [userId]
   );
   const { rows: checkins } = await pool.query(
-    "SELECT goal_id, TO_CHAR(checkin_date, 'YYYY-MM-DD') AS checkin_date FROM checkins WHERE user_id = $1 ORDER BY checkin_date ASC",
+    "SELECT goal_id, TO_CHAR(checkin_date, 'YYYY-MM-DD') AS checkin_date, note FROM checkins WHERE user_id = $1 ORDER BY checkin_date ASC",
     [userId]
   );
 
@@ -117,7 +124,7 @@ async function fetchGoals(userId) {
   for (const row of checkins) {
     const id = String(row.goal_id);
     if (!byGoal.has(id)) byGoal.set(id, []);
-    byGoal.get(id).push(row.checkin_date);
+    byGoal.get(id).push({ date: row.checkin_date, note: row.note || "" });
   }
 
   return goals.map((goal) => toGoal(goal, byGoal.get(String(goal.id)) || []));
@@ -202,7 +209,7 @@ app.get("/api/users", async (req, res, next) => {
 // Goals
 app.get("/api/goals", async (req, res, next) => {
   try {
-    res.json(await fetchGoals(req.userId));
+    res.json(await fetchGoals(req.userId, req.query.archived === "1"));
   } catch (error) { next(error); }
 });
 
@@ -263,6 +270,31 @@ app.put("/api/goals/:id", async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
+app.post("/api/goals/:id/pin", async (req, res, next) => {
+  try {
+    if (!req.userId) return res.status(400).json({ message: "请先选择用户。" });
+    const { pinned } = req.body;
+    await pool.query("UPDATE goals SET pinned = $1 WHERE id = $2 AND user_id = $3", [!!pinned, Number(req.params.id), req.userId]);
+    res.json({ ok: true });
+  } catch (error) { next(error); }
+});
+
+app.post("/api/goals/:id/archive", async (req, res, next) => {
+  try {
+    if (!req.userId) return res.status(400).json({ message: "请先选择用户。" });
+    await pool.query("UPDATE goals SET archived = TRUE WHERE id = $1 AND user_id = $2", [Number(req.params.id), req.userId]);
+    res.json({ ok: true });
+  } catch (error) { next(error); }
+});
+
+app.post("/api/goals/:id/restore", async (req, res, next) => {
+  try {
+    if (!req.userId) return res.status(400).json({ message: "请先选择用户。" });
+    await pool.query("UPDATE goals SET archived = FALSE WHERE id = $1 AND user_id = $2", [Number(req.params.id), req.userId]);
+    res.json({ ok: true });
+  } catch (error) { next(error); }
+});
+
 // Checkins
 app.post("/api/goals/:id/checkins", async (req, res, next) => {
   try {
@@ -275,8 +307,8 @@ app.post("/api/goals/:id/checkins", async (req, res, next) => {
 
     try {
       await pool.query(
-        "INSERT INTO checkins (goal_id, checkin_date, user_id) VALUES ($1, $2, $3)",
-        [goalId, date, req.userId]
+        "INSERT INTO checkins (goal_id, checkin_date, user_id, note) VALUES ($1, $2, $3, $4)",
+        [goalId, date, req.userId, (req.body.note || "").slice(0, 200)]
       );
     } catch (error) {
       if (error.code === "23505") {
@@ -285,7 +317,7 @@ app.post("/api/goals/:id/checkins", async (req, res, next) => {
       throw error;
     }
 
-    res.status(201).json({ ok: true, date });
+    res.status(201).json({ ok: true, date, note: (req.body.note || "").slice(0, 200) });
   } catch (error) { next(error); }
 });
 
@@ -421,6 +453,50 @@ app.get("/api/stats/review-hint", async (req, res, next) => {
     } catch (e) { streak = 0; }
 
     res.json({ weeklyTotal, lastWeekTotal, trend: weeklyTotal > lastWeekTotal ? "up" : weeklyTotal < lastWeekTotal ? "down" : "same", streak, weakDay: null });
+  } catch (error) { next(error); }
+});
+
+app.get("/api/stats/overview", async (req, res, next) => {
+  try {
+    if (!req.userId) return res.json({ totalCheckins: 0, monthlyTrend: [], completionRate: 0, streak: 0 });
+
+    const { rows: [totalRow] } = await pool.query(
+      "SELECT COUNT(*)::int AS total FROM checkins WHERE user_id = $1", [req.userId]
+    );
+
+    const { rows: monthly } = await pool.query(
+      `SELECT TO_CHAR(checkin_date, 'YYYY-MM') AS month, COUNT(*)::int AS count
+       FROM checkins WHERE user_id = $1 AND checkin_date >= NOW() - INTERVAL '6 months'
+       GROUP BY month ORDER BY month`, [req.userId]
+    );
+
+    const { rows: [goalRow] } = await pool.query(
+      "SELECT COUNT(*)::int AS total, COUNT(*) FILTER (WHERE days > 0 AND (SELECT COUNT(*) FROM checkins WHERE goal_id = goals.id) >= days)::int AS completed FROM goals WHERE user_id = $1 AND (archived IS NULL OR archived = FALSE)",
+      [req.userId]
+    );
+
+    // Streak
+    let streak = 0;
+    const { rows: dates } = await pool.query(
+      "SELECT DISTINCT checkin_date FROM checkins WHERE user_id = $1 ORDER BY checkin_date DESC LIMIT 100", [req.userId]
+    );
+    var cursor = new Date();
+    var todayStr = cursor.toISOString().slice(0,10);
+    var dateSet = new Set(dates.map(function(d) { return new Date(d.checkin_date).toISOString().slice(0,10); }));
+    if (!dateSet.has(todayStr)) { cursor.setDate(cursor.getDate() - 1); }
+    while (dateSet.has(cursor.toISOString().slice(0,10))) {
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+
+    res.json({
+      totalCheckins: totalRow.total,
+      monthlyTrend: monthly,
+      totalGoals: goalRow.total,
+      completedGoals: goalRow.completed,
+      completionRate: goalRow.total > 0 ? Math.round(goalRow.completed / goalRow.total * 100) : 0,
+      streak
+    });
   } catch (error) { next(error); }
 });
 
