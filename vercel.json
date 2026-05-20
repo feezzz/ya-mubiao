@@ -1,15 +1,11 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "api/index.js", "use": "@vercel/node" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/index.js" },
-    { "src": "/designv2/(.*)", "dest": "/designv2/$1" },
-    { "src": "/icons/(.*)", "dest": "/icons/$1" },
-    { "src": "/js/(.*)", "dest": "/js/$1" },
-    { "src": "/(.*\\.(css|webmanifest|png|jpg|svg|ico))", "dest": "/$1" },
-    { "src": "/service-worker.js", "dest": "/service-worker.js" },
-    { "src": "/(.*)", "dest": "/api/index.js" }
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "designv2/**/*,js/**/*,icons/**/*,styles.css,index.html,manifest.webmanifest,service-worker.js,templates.json"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index" }
   ]
 }
