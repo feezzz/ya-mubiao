@@ -51,6 +51,41 @@
     window.setTimeout(() => toast.classList.remove("show"), 2400);
   }
 
+  var loadingTimer = null;
+  function showLoading() {
+    var bar = $("#loadingBar");
+    if (!bar) return;
+    clearTimeout(loadingTimer);
+    bar.classList.add("running");
+    bar.style.width = "0";
+    requestAnimationFrame(function() { bar.style.width = "70%"; });
+  }
+
+  function hideLoading() {
+    var bar = $("#loadingBar");
+    if (!bar) return;
+    bar.classList.remove("running");
+    bar.classList.add("done");
+    loadingTimer = setTimeout(function() {
+      bar.classList.remove("done");
+      bar.style.width = "0";
+    }, 400);
+  }
+
+  function buttonLoading(btn, loading) {
+    if (!btn) return;
+    if (loading) {
+      btn.disabled = true;
+      btn._origHTML = btn.innerHTML;
+      btn.innerHTML = '<span class="btn-spinner"></span>' + (btn.getAttribute('data-loading-text') || '加载中...');
+      btn.classList.add('loading');
+    } else {
+      btn.disabled = false;
+      if (btn._origHTML) btn.innerHTML = btn._origHTML;
+      btn.classList.remove('loading');
+    }
+  }
+
   function render() {
     window.App.renderHome();
     window.App.renderDetail();
@@ -72,7 +107,15 @@
 
     ["#quickCheckin", "#mobileQuickCheckin", "#detailCheckin"].forEach((sel) => {
       const btn = $(sel);
-      if (btn) btn.addEventListener("click", window.App.checkin);
+      if (btn) btn.addEventListener("click", async function() {
+        var origText = btn.textContent;
+        btn.textContent = "⏳ 打卡中...";
+        btn.disabled = true;
+        try { await window.App.checkin(); } finally {
+          btn.disabled = false;
+          btn.textContent = origText;
+        }
+      });
     });
 
     const delBtn = $("#deleteGoal");
@@ -95,11 +138,17 @@
       goalForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!window.App.validateCreateStep(3)) return;
-        await window.App.createGoal(window.App.createFormData());
-        e.target.reset();
-        $("#goalDays").value = 30;
-        $("#goalTime").value = "20 分钟";
-        window.App.resetCreateFlow();
+        var submitBtn = $("#submitGoal");
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "⏳ 种下中..."; }
+        try {
+          await window.App.createGoal(window.App.createFormData());
+          e.target.reset();
+          $("#goalDays").value = 30;
+          $("#goalTime").value = "20 分钟";
+          window.App.resetCreateFlow();
+        } finally {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "种下目标"; }
+        }
       });
     }
 
@@ -342,6 +391,8 @@
   window.App.setCheckinButtons = setCheckinButtons;
   window.App.showView = showView;
   window.App.showToast = showToast;
+  window.App.showLoading = showLoading;
+  window.App.hideLoading = hideLoading;
   window.App.render = render;
   window.App.bindEvents = bindEvents;
 

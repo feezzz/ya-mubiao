@@ -4,18 +4,24 @@ window.App = window.App || {};
   const API_BASE = "/api";
 
   async function request(path, options = {}) {
-    const headers = { "Content-Type": "application/json" };
-    const uid = App.getUserId();
-    if (uid) { headers["x-user-id"] = uid; }
-    const response = await fetch(`${API_BASE}${path}`, {
-      headers: headers,
-      ...options
-    });
-    const data = await response.json().catch(() => null);
-    if (!response.ok) {
-      throw new Error(data?.message || "请求失败，请检查后端服务。");
+    var isWrite = options.method && options.method !== "GET";
+    if (isWrite && App.showLoading) App.showLoading();
+    try {
+      const headers = { "Content-Type": "application/json" };
+      const uid = App.getUserId();
+      if (uid) { headers["x-user-id"] = uid; }
+      const response = await fetch(`${API_BASE}${path}`, {
+        headers: headers,
+        ...options
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(data?.message || "请求失败，请检查后端服务。");
+      }
+      return data;
+    } finally {
+      if (isWrite && App.hideLoading) App.hideLoading();
     }
-    return data;
   }
 
   async function loadData() {
