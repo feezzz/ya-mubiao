@@ -14,6 +14,11 @@ const pool = new Pool({
 });
 
 app.use(express.json());
+
+// Static files — explicit routes for Vercel compatibility
+app.use("/designv2", express.static(path.join(__dirname, "designv2")));
+app.use("/js", express.static(path.join(__dirname, "js")));
+app.use("/icons", express.static(path.join(__dirname, "icons")));
 app.use(express.static(__dirname, {
   setHeaders(res, filePath) {
     if (filePath.endsWith(".webmanifest")) {
